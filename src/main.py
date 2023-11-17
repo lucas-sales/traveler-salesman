@@ -22,6 +22,7 @@ solutions_sd_nn = {}
 data_s = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/small_data")
 data_m = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/medium_data")
 data_l = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/large_data")
+print(data_s)
 
 
 def run_experiment_nn(itr: int):
@@ -34,6 +35,7 @@ def run_experiment_nn(itr: int):
         t.stop()
         timestamp_lst.append(t.last)
         logging.info("Time spent: " + str(t.last))
+        # images(prob["node_coords"], solutions)
 
     sd_nn_df.loc[itr] = timestamp_lst  # insert timestamp list into dataframe
     solutions_sd_nn[itr] = solutions  # insert solutions into dictionary
