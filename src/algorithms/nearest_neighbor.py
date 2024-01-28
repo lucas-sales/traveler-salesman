@@ -4,6 +4,11 @@ from src.utils.data_helper import extract_data
 
 # Função para encontrar o próximo vizinho mais próximo a partir de uma cidade
 def find_nearest_neighbor(city, unvisited_cities):
+    """
+    :param city:
+    :param unvisited_cities:
+    :return:
+    """
     nearest_distance = float('inf')
     nearest_city = None
 
@@ -18,7 +23,10 @@ def find_nearest_neighbor(city, unvisited_cities):
 
 # Algoritmo do Vizinho Mais Próximo para encontrar o caminho
 def nearest_neighbor_tsp(coordinates):
-    num_cities = len(coordinates)
+    """
+    :param coordinates:
+    :return:
+    """
     path = [1]  # Começamos na cidade 1 (pode ser qualquer cidade inicial)
     unvisited_cities = coordinates.copy()  # Todas as cidades, exceto a cidade de origem
 
@@ -32,5 +40,4 @@ def nearest_neighbor_tsp(coordinates):
 
     path.append(path[0])  # Retornar à cidade de origem para completar o ciclo
     custo = calculate_total_distance(coordinates, path)
-    print("Custo: " + str(custo))
-    return path
+    return path, str(custo)

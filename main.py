@@ -1,15 +1,18 @@
 import logging
 import argparse
 from codetiming import Timer
-import pandas as pd
-from utils.data_helper import extract_data
+from src.utils.data_helper import extract_data
 from src.algorithms.nearest_neighbor import nearest_neighbor_tsp
+from src.algorithms.ant_colony import ant_colony_optimization_tsp
+from src.algorithms.tabu_search import tabu_search
+from src.algorithms.genetic_algorithm import genetic_algorithm
+from src.algorithms.simulated_annealing import simulated_annealing
 
-# Configuração do parser de argumentos
+# Argument parser configuration
 parser = argparse.ArgumentParser(description='Descrição do seu script.')
 parser.add_argument('--algorithm', type=str, default="nn", help='Algoritmo a ser executado')
-parser.add_argument('--instancia', type=str, default="sd", help='Instancia de teste')
-parser.add_argument('--rounds', type=int, default=3, help='Número de repetições no teste')
+parser.add_argument('--instance', type=str, default="sd", help='Instancia de teste')
+parser.add_argument('--file', type=str, help='arquivo de teste')
 args = parser.parse_args()
 
 # Environment setup
@@ -18,41 +21,55 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S")
 
-# Dataframe_time_setup
-# sd_df = pd.DataFrame(columns=['gr96', 'berlin52', 'pr76', 'ulysses22', 'att48'], index=range(5))
-sd_df = {}
-timers = {}
-# Dataframe_solution_setup
-solutions_sd_nn = {}
 
 # Experiment Setup
 data_s = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/small_data")
 data_m = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/medium_data")
 data_l = extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/large_data")
 
+# Algorithms available
+algorithm_catalog = {"nn": nearest_neighbor_tsp,
+                     "ts": tabu_search,
+                     "ac": ant_colony_optimization_tsp,
+                     "ga": genetic_algorithm,
+                     "sa": simulated_annealing}
 
-def run_experiment_nn(alg: str = "nn"):
-    solutions = {}
-    logging.info("Small data:")
-    t = Timer(name="class", logger=None, text="Time spent: {seconds:.4f}")
-    alg_lst = {"nn": nearest_neighbor_tsp}
 
-    for prob in data_s:
-        t.start()
-        solutions[prob["name"]] = alg_lst[alg](prob["node_coords"])
-        t.stop()
-        timers[prob["name"]] = t.last
-        logging.info(prob["name"] + ":" + "Time spent: " + str(t.last))
+def run_algorithm(alg: str, inst: str, file: str) -> None:
+    """
+    :param alg: Algorithm to be executed
+    :param inst: Instance of test
+    :param file: File to be executed
+    :return: Information about the experiment
+    """
 
-    # sd_df.loc[0] = timestamp_lst  # insert timestamp list into dataframe
-    solutions_sd_nn[0] = solutions  # insert solutions into dictionary
+    logging.info(f'Executing algorithm {alg}, for the file {file}')
+    if inst == "sd":
+        current_instance = data_s
+    elif inst == "md":
+        current_instance = data_m
+    elif inst == "ld":
+        current_instance = data_l
+    else:
+        logging.error(f'Instance {inst} not founded!')
+        exit()
 
-    # print(timers)
-
+    if current_instance:
+        for f in current_instance:
+            if f["name"] == file:
+                t = Timer(name="class", logger=None, text="Time spent: {seconds:.4f}")
+                t.start()
+                solution = algorithm_catalog[alg](f["node_coords"])
+                t.stop()
+                logging.info(f["name"] + " - " + "Time spent: " + str(t.last))
+                logging.info(f"Solution: {solution[0]}")
+                logging.info("Distance: %.2f" % float(solution[1]))
+                break
 
 
 def main():
-    run_experiment_nn(args.algorithm)
+    run_algorithm(args.algorithm, args.instance, args.file)
+
 
 if __name__ == "__main__":
     main()
