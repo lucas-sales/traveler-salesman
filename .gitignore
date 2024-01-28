@@ -1,2 +1,4 @@
 .idea/
 *env
+.env_tcc/
+/env_tcc/
