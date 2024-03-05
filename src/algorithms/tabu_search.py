@@ -1,39 +1,28 @@
 import random
+from collections import deque
 from src.utils.helper import calculate_total_distance
 
 
-# Função para gerar uma solução vizinha (perturbação na solução atual)
 def generate_neighbor(solution):
-    """
-    :param solution:
-    :return:
-    """
     neighbor = solution.copy()
     i, j = random.sample(range(len(solution)), 2)
     neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
     return neighbor
 
 
-# Implementação da busca tabu
 def tabu_search(city_coordinates):
-    """
-
-    :param city_coordinates:
-    :return:
-    """
     num_cities = len(city_coordinates)
-    initial_solution = list(range(1, num_cities + 1))  # Permutação inicial
-    max_iterations = 1000
+    initial_solution = list(range(1, num_cities + 1))
+    max_iterations = 10000
     tabu_list_size = num_cities // 2
     current_solution = initial_solution
     best_solution = current_solution
-    tabu_list = []
-    iterations_without_improvement = 0
+    tabu_list = deque(maxlen=tabu_list_size)
+    iterations_without_improvement = 1000
 
     for iteration in range(max_iterations):
         neighbor_solution = generate_neighbor(current_solution)
 
-        # Evitar soluções na lista tabu
         while neighbor_solution in tabu_list:
             neighbor_solution = generate_neighbor(current_solution)
 
@@ -43,24 +32,18 @@ def tabu_search(city_coordinates):
         if neighbor_distance < current_distance:
             current_solution = neighbor_solution
 
-            # Atualização da melhor solução encontrada
             if neighbor_distance < calculate_total_distance(city_coordinates, best_solution):
                 best_solution = neighbor_solution
 
-            # Adicionar a solução atual à lista tabu
-            tabu_list.append(current_solution)
-            if len(tabu_list) > tabu_list_size:
-                tabu_list.pop(0)
-
+            tabu_list.append(neighbor_solution)
             iterations_without_improvement = 0
         else:
             iterations_without_improvement += 1
 
         if iterations_without_improvement >= max_iterations // 10:
-            # Reiniciar a busca para escapar de mínimos locais
             current_solution = best_solution
 
-    best_solution.append(best_solution[0])  # Retornar à cidade de origem para completar o ciclo
+    best_solution.append(best_solution[0])
     custo = calculate_total_distance(city_coordinates, best_solution)
     return best_solution, str(custo)
 

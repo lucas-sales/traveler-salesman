@@ -45,7 +45,7 @@ def simulated_annealing(city_coordinates):
     :return:
     """
     max_iterations = 1000
-    initial_temperature = 1000.0
+    initial_temperature = 0.025
     cooling_rate = 0.99
     current_solution = generate_initial_solution(city_coordinates)
     current_distance = calculate_total_distance(city_coordinates, current_solution)

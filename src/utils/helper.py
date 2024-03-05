@@ -1,4 +1,5 @@
 import numpy as np
+import itertools
 
 
 def euclidean_distance(city1, city2):
@@ -17,3 +18,11 @@ def calculate_total_distance(city_coordinates, solution):
     total_distance += euclidean_distance(city_coordinates[solution[-1]],
                                          city_coordinates[solution[0]])  # Retornar à cidade de origem
     return total_distance
+
+
+def has_hamiltonian_path(graph):
+    num_vertices = len(graph)
+    for perm in itertools.permutations(range(num_vertices)):
+        if all(graph[perm[i]][perm[i+1]] == 1 for i in range(num_vertices - 1)):
+            return True
+    return False

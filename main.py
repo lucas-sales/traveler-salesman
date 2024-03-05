@@ -63,8 +63,9 @@ def run_algorithm(alg: str, inst: str, file: str) -> None:
                 t.stop()
                 logging.info(f["name"] + " - " + "Time spent: " + str(t.last))
                 logging.info(f"Solution: {solution[0]}")
-                logging.info("Distance: %.2f" % float(solution[1]))
+                logging.info("Distance found: %.2f" % float(solution[1]))
                 break
+        
 
 
 def main():

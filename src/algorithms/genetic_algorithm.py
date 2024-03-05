@@ -63,8 +63,8 @@ def genetic_algorithm(city_coordinates):
     :param city_coordinates:
     :return:
     """
-    num_generations = 100
-    population_size = 100
+    num_generations = 10000
+    population_size = 300
     crossover_probability = 0.7
     mutation_probability = 0.1
 

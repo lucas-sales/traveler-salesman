@@ -1,3 +1,4 @@
+import random
 from src.utils.helper import euclidean_distance, calculate_total_distance
 from src.utils.data_helper import extract_data
 
@@ -22,22 +23,29 @@ def find_nearest_neighbor(city, unvisited_cities):
 
 
 # Algoritmo do Vizinho Mais Próximo para encontrar o caminho
-def nearest_neighbor_tsp(coordinates):
-    """
-    :param coordinates:
-    :return:
-    """
-    path = [1]  # Começamos na cidade 1 (pode ser qualquer cidade inicial)
-    unvisited_cities = coordinates.copy()  # Todas as cidades, exceto a cidade de origem
+def nearest_neighbor_tsp(coordinates, num_iterations=600):
+    best_path = None
+    best_custo = float('inf')
 
-    del unvisited_cities[1]  # Remove a cidade de origem
+    for _ in range(num_iterations):
+        # Escolher uma cidade inicial aleatória
+        initial_city = random.choice(list(coordinates.keys()))
 
-    while unvisited_cities:
-        current_city = path[-1]
-        nearest_city, _ = find_nearest_neighbor(coordinates[current_city], unvisited_cities)
-        path.append(nearest_city)
-        del unvisited_cities[nearest_city]
+        path = [initial_city]
+        unvisited_cities = coordinates.copy()
+        del unvisited_cities[initial_city]
 
-    path.append(path[0])  # Retornar à cidade de origem para completar o ciclo
-    custo = calculate_total_distance(coordinates, path)
-    return path, str(custo)
+        while unvisited_cities:
+            current_city = path[-1]
+            nearest_city, _ = find_nearest_neighbor(coordinates[current_city], unvisited_cities)
+            path.append(nearest_city)
+            del unvisited_cities[nearest_city]
+
+        path.append(path[0])  # Retornar à cidade de origem para completar o ciclo
+        custo = calculate_total_distance(coordinates, path)
+
+        if custo < best_custo:
+            best_path = path
+            best_custo = custo
+
+    return best_path, str(best_custo)

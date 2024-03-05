@@ -10,5 +10,3 @@ def extract_data(path: str):
         problem_list.append(problem.as_dict())
     return problem_list
 
-
-# Test: print(extract_data("/Users/lucassales/Dev/TCC/traveler-salesman/small_data"))
