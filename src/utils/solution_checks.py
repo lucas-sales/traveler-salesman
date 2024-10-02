@@ -1,5 +1,5 @@
 from data_helper import extract_data
-from helper import calculate_total_distance
+from math_helper import calculate_total_distance
 
 
 def get_best_solution(file_name) -> None:
@@ -13,5 +13,5 @@ def get_best_solution(file_name) -> None:
                 if r['name'] == str(file_name + '.opt.tour'):
                     print(calculate_total_distance(f["node_coords"], sum(r["tours"], [])))
 
-
-get_best_solution('pr1002')
+# Exemplo de uso
+# get_best_solution('pr1002')

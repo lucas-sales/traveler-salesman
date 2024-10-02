@@ -1,4 +1,4 @@
-#!/Users/lucassales/Dev/TCC/traveler-salesman/env_tcc/bin/python3
+#!/Users/lucassales/Dev/TCC/traveler-salesman/env_tcc/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

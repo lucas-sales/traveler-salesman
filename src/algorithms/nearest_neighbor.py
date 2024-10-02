@@ -1,6 +1,5 @@
 import random
-from src.utils.helper import euclidean_distance, calculate_total_distance
-from src.utils.data_helper import extract_data
+from src.utils.math_helper import euclidean_distance, calculate_total_distance
 
 
 # Função para encontrar o próximo vizinho mais próximo a partir de uma cidade
@@ -23,7 +22,7 @@ def find_nearest_neighbor(city, unvisited_cities):
 
 
 # Algoritmo do Vizinho Mais Próximo para encontrar o caminho
-def nearest_neighbor_tsp(coordinates, num_iterations=600):
+def nearest_neighbor_tsp(coordinates, num_iterations=1000):
     best_path = None
     best_custo = float('inf')
 
